@@ -1,17 +1,24 @@
 @font-face {
-	font-family: "04b03";
-	src: url("../css/fonts/04B_03__.TTF") format('truetype');
+	font-family: "04B_03__";
+	src: url("fonts/04B_03__.TTF") format('truetype');
+	src: url("fonts/04B_03__.woff");
 	font-weight: normal;
 	font-style: normal;
 }
 
 body {
-	font-family: "04b03";
+	font-family: "04B_03__";
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	margin-top: 50px;
-	background-color: #242526;
+	background-color: #1a1a1a;
+}
+
+h1 {
+	font-family: "04B_03__";
+	letter-spacing: 1.5px;
+	color: #afafaf;
 }
 
 #game {
