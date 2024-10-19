@@ -13,12 +13,29 @@ body {
 	align-items: center;
 	margin-top: 50px;
 	background-color: #1a1a1a;
+	font-size: medium;
 }
 
 h1 {
 	font-family: "04B_03__";
 	letter-spacing: 1.5px;
 	color: #afafaf;
+}
+
+form {
+	color: #afafaf;
+}
+
+input {
+	font-family: "04B_03__";
+	color: #afafaf;
+	background-color: #1a1a1a;
+}
+
+textarea {
+	font-family: "04B_03__";
+	color: #afafaf;
+	background-color: #1a1a1a;
 }
 
 #game {
