@@ -1,14 +1,20 @@
-var aesjs = require('aes-js');
+import { encrypt } from './encrypt.js';
 
 let board = [];
 
 function init() {
 	var game = document.getElementById("game");
+
+	var key = document.getElementById("key");
+	var message = document.getElementById("message");
+
+	const encryptedBytesArr = encrypt(key, message);
+	console.log(encryptedBytes);
 	
 	board = Array(rows).fill(null).map(() => 
 		Array(cols).fill({ revealed: false, flagged: false, mine: false, 
 						   nearMines: 0 }));
-	const encryptedBytes = encrypt();
+
 	placeMines();
 	setNumbers();
 
@@ -18,18 +24,6 @@ function init() {
 			cell.classList.add("cell");
 		}
 	}
-}
-
-function encrypt() {
-	var key = document.getElementById("key");
-	var message = document.getElementById("message");
-
-	var keyBytes = aesjs.utils.utf8.toBytes(key);
-	var messageBytes = aesjs.utils.utf8.toBytes(message);
-
-	var aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter());
-	
-	return aesCtr.encrypt(messageBytes);
 }
 
 function placeMines() {
