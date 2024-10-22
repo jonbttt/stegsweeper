@@ -37,6 +37,7 @@ export function encrypt(key, message) {
 	var encryptedBytes = aesCtr.encrypt(messageBytes);
 
 	var encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
+	var encryptedHexKey = aesjs.utils.hex.fromBytes(keyBytes);
 
-	return hex2Bin(encryptedHex);
+	return hex2Bin(encryptedHexKey).concat(hex2Bin(encryptedHex));
 }
