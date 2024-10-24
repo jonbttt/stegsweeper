@@ -3,9 +3,23 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>StegSweeper</title>
-	<link rel="stylesheet" href="css/styles.css">
 </head>
+<link rel="stylesheet" href="css/styles.css">
+
 <body>
 	<h1>StegSweeper</h1>
+	<br>
+	<form>
+		<label for="key">Key:</label><br>
+		<input type="text" placeholder="Must be 16 bytes" id="key" 
+			   name="key" minlength="16" maxlength="16"><br><br>
+		<label for="message">Message:</label><br>
+		<textarea id="message" name="message" rows="4" cols="50" 
+				  minlength="1"></textarea><br><br><br>
+		<input type="submit" value="Submit">
+	</form>
+	<div id="game"></div>
 </body>
+<script type="module" src="./stegsweeper.js"></script>
+
 </html>
