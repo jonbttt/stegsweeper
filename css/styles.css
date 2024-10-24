@@ -6,6 +6,14 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: "minesweeper";
+	src: url("fonts/mine-sweeper.ttf") format('truetype');
+	src: url("fonts/mine-sweeper.otf") format('opentype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 body {
 	font-family: "04B_03__";
 	display: flex;
@@ -38,12 +46,51 @@ textarea {
 	background-color: #1a1a1a;
 }
 
-#game {
-	display: grid;
-	gap: 2px;
+.board {
+	display: inline-block;
+	margin: 20px;
 }
 
 .cell {
+	width: 30px;
+	height: 30px;
+	border: 1px solid #ccc;
+	display: inline-block;
 	text-align: center;
-	border: 1px;
+	vertical-align: middle;
+	font-size: 20px;
+	cursor: pointer;
+
+	/* Default color for unrevealed tiles */
+	background-color: #eee;
+
+	/* Default color for unrevealed tile text */
+	color: #333;
+}
+
+.revealed {
+	font-family: "04B_03__";
+	/* Color for revealed tiles */
+	background-color: #ccc;
+
+	/* Color for revealed tile text */
+	color: #000;
+}
+
+.mine {
+	font-family: "minesweeper";
+	/* Color for revealed tiles */
+	background-color: #ccc;
+
+	/* Color for revealed tile text */
+	color: #000;
+}
+
+.flag {
+	font-family: "minesweeper";
+	/* Color for revealed tiles */
+	background-color: #ccc;
+
+	/* Color for revealed tile text */
+	color: #be3333;
 }
