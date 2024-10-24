@@ -1,4 +1,4 @@
-import aesjs from '/node_modules/aes-js/index.js';
+import aesjs from 'node_modules/aes-js/index.js';
 
 var hex2BinMap = {
 	'0': [0, 0, 0, 0],
