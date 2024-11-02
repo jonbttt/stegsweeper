@@ -169,8 +169,36 @@ function updateBoard() {
 					cell.textContent = "*";
 				} else {
 					cell.classList.add("revealed");
+
 					if (board[row][col].nearMines !== 0) {
 						cell.textContent = board[row][col].nearMines;
+
+						switch(board[row][col].nearMines) {
+							case 1:
+								cell.classList.add("number1");
+								break;
+							case 2:
+								cell.classList.add("number2");
+								break;
+							case 3:
+								cell.classList.add("number3");
+								break;
+							case 4:
+								cell.classList.add("number4");
+								break;
+							case 5:
+								cell.classList.add("number5");
+								break;
+							case 6:
+								cell.classList.add("number6");
+								break;
+							case 7:
+								cell.classList.add("number7");
+								break;
+							case 8:
+								cell.classList.add("number8");
+								break;
+						}
 					}
 				}
 			}
@@ -182,6 +210,7 @@ function updateBoard() {
 
 			cell.addEventListener("click", () => revealCell(row, col));
 			cell.addEventListener("contextmenu", () => flagCell(row, col));
+			cell.addEventListener("contextmenu", e => e.preventDefault());
 			game.appendChild(cell);
 		}
 		game.appendChild(document.createElement("br"));
