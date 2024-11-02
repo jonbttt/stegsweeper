@@ -54,42 +54,66 @@ textarea {
 .cell {
 	width: 30px;
 	height: 30px;
-	border: 1px solid #ccc;
 	display: inline-block;
 	text-align: center;
 	vertical-align: middle;
-	font-size: 20px;
+	font-size: 30px;
 	cursor: pointer;
-
-	/* Default color for unrevealed tiles */
-	background-color: #eee;
-
-	/* Default color for unrevealed tile text */
-	color: #333;
+	background-color: #1a1a1a;
+	border-style: outset;
+	border-color: buttonborder;
 }
 
 .revealed {
 	font-family: "04B_03__";
-	/* Color for revealed tiles */
-	background-color: #ccc;
-
-	/* Color for revealed tile text */
-	color: #000;
+	background-color: #1a1a1a;
+	border-style:inset;
 }
 
 .mine {
 	font-family: "minesweeper";
-	/* Color for revealed tiles */
-	background-color: #ccc;
+	font-size: 20px;
+	background-color: #1a1a1a;
+	color: #afafaf;
+	border-style:inset;
+}
 
-	/* Color for revealed tile text */
-	color: #000;
+.number1 {
+	color: #228bcf;
+}
+
+.number2 {
+	color: #20af5d;
+}
+
+.number3 {
+	color: #cf3e2d;
+}
+
+.number4 {
+	color: #af49ad;
+}
+
+.number5 {
+	color: #df9502;
+}
+
+.number6 {
+	color: #36ccb8;
+}
+
+.number7 {
+	color: #e77000;
+}
+
+.number8 {
+	color: #5caace;
 }
 
 .flag {
 	font-family: "minesweeper";
-	/* Color for revealed tiles */
-	background-color: #ccc;
+	font-size: 20px;
+	background-color: #1a1a1a;
 
 	/* Color for revealed tile text */
 	color: #be3333;
