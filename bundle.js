@@ -837,11 +837,9 @@ const game = document.getElementById("game");
 let board = [];
 
 function init() {
-	var key = document.getElementById("key");
-	var message = document.getElementById("message");
+	var key = document.getElementById("key").value;
+	var message = document.getElementById("message").value;
 
-	var key = "1234567890123456";
-	var message = "helloooooo";
 
 	const encryptedBitsArr = encrypt(key, message);
 
@@ -849,10 +847,17 @@ function init() {
 	setNumbers();
 }
 
+const form = document.getElementById("form");
+form.addEventListener("submit", (e) => {
+	e.preventDefault();
+	init();
+	updateBoard();
+  });
+
 function generateBoard(encryptedBitsArr) {
 	const length = encryptedBitsArr.length;
-	rows = Math.ceil(Math.sqrt(length) / 0.8);
-	cols = Math.ceil(length / rows);
+	cols = Math.ceil(Math.ceil(Math.sqrt(length) / 0.8) / 4.0) * 4;
+	rows = Math.ceil(length / cols) * 3;
 
 	for (let row = 0; row < rows; row++) {
 		board[row] = [];
@@ -866,14 +871,8 @@ function generateBoard(encryptedBitsArr) {
 			}
 		}
 	}
-
-	console.log(rows);
-	console.log(cols);
-	console.log(board[2][2].mine);
-	console.log(board);
 	
 	var i = 0;
-
 	for (let row = 0; row < rows; row++) {
 		for (let col = 0; col < cols; col++) {
 			if (i > length) {
@@ -881,13 +880,22 @@ function generateBoard(encryptedBitsArr) {
 				continue;
 			}
 
-			if (encryptedBitsArr[i] == 1) {
-				board[row][col].mine = true;
-			} else {
-				board[row][col].mine = false;
-			}
+			if (row % 3 == 0) {
+				if (encryptedBitsArr[i] == 1) {
+					board[row][col].mine = true;
+				} else {
+					board[row][col].mine = false;
+				}
 
-			i++;
+				i++;
+			} else {
+				let result = Math.floor(Math.random() * 3);
+				if (result == 0) {
+					board[row][col].mine = true;
+				} else {
+					board[row][col].mine = false;
+				}
+			}
 		}
 	}
 }
@@ -965,8 +973,11 @@ function updateBoard() {
 				if (board[row][col].mine) {
 					cell.classList.add("mine");
 					cell.textContent = "*";
-				} else if (board[row][col].nearMines !== 0) {
-					cell.textContent = board[row][col].nearMines;
+				} else {
+					cell.classList.add("revealed");
+					if (board[row][col].nearMines !== 0) {
+						cell.textContent = board[row][col].nearMines;
+					}
 				}
 			}
 
@@ -981,6 +992,10 @@ function updateBoard() {
 		}
 		game.appendChild(document.createElement("br"));
 	}
+}
+
+function gameOver() {
+
 }
 
 function hex2Bin(s) {
@@ -1005,7 +1020,4 @@ function encrypt(key, message) {
 
 	return hex2Bin(encryptedHexKey).concat(hex2Bin(encryptedHex));
 }
-
-init();
-updateBoard();
 },{"./node_modules/aes-js/index.js":1}]},{},[2]);
