@@ -38,7 +38,6 @@ function init() {
 	var message = "helloooooo";
 
 	const encryptedBitsArr = encrypt(key, message);
-	console.log(encryptedBitsArr);
 
 	generateBoard(encryptedBitsArr);
 	setNumbers();
@@ -46,13 +45,13 @@ function init() {
 
 function generateBoard(encryptedBitsArr) {
 	const length = encryptedBitsArr.length;
-	rows = Math.ceil(length * 0.8);
+	rows = Math.ceil(Math.sqrt(length) / 0.8);
 	cols = Math.ceil(length / rows);
 
-	for (const row in rows) {
+	for (let row = 0; row < rows; row++) {
 		board[row] = [];
 
-		for (const col in cols) {
+		for (let col = 0; col < cols; col++) {
 			board[row][col] = {
 				mine: false,
 				nearMines: 0,
@@ -61,18 +60,25 @@ function generateBoard(encryptedBitsArr) {
 			}
 		}
 	}
+
+	console.log(rows);
+	console.log(cols);
+	console.log(board[2][2].mine);
+	console.log(board);
 	
 	var i = 0;
 
-	for (const row of board) {
-		for (const cell of row) {
+	for (let row = 0; row < rows; row++) {
+		for (let col = 0; col < cols; col++) {
 			if (i > length) {
 				i++;
 				continue;
 			}
 
-			if (encryptedBitsArr[i] = 1) {
-				cell.mine = true;
+			if (encryptedBitsArr[i] == 1) {
+				board[row][col].mine = true;
+			} else {
+				board[row][col].mine = false;
 			}
 
 			i++;
@@ -81,8 +87,8 @@ function generateBoard(encryptedBitsArr) {
 }
 
 function setNumbers() {
-	for (const row in board) {
-		for (const col in row) {
+	for (let row = 0; row < rows; row++) {
+		for (let col = 0; col < cols; col++) {
 			var count = 0;
 			if (!board[row][col].mine) {
 				for (const [x, y] of directions) {
@@ -103,9 +109,6 @@ function setNumbers() {
 }
 
 function revealCell(row, col) {
-	const rows = board.length;
-	const cols = board[0].length;
-
 	if (row < 0 || row >= rows || col < 0 || col >= cols ||
 		board[row][col].revealed || board[row][col].flagged
 	) {
@@ -135,7 +138,11 @@ function flagCell(row, col) {
 		return;
 	}
 
-	board[row][col].flagged = true;
+	if (board[row][col].flagged == false) {
+		board[row][col].flagged = true;
+	} else {
+		board[row][col].flagged = false;
+	}
 
 	updateBoard();
 }
@@ -152,8 +159,8 @@ function updateBoard() {
 				if (board[row][col].mine) {
 					cell.classList.add("mine");
 					cell.textContent = "*";
-				} else if (board[i][j].nearMines !== 0) {
-					cell.textContent = board[i][j].nearMines;
+				} else if (board[row][col].nearMines !== 0) {
+					cell.textContent = board[row][col].nearMines;
 				}
 			}
 
