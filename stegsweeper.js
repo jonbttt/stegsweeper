@@ -1,4 +1,4 @@
-import aesjs from 'node_modules/aes-js/index.js';
+var aesjs = require('./node_modules/aes-js/index.js');
 
 var hex2BinMap = {
 	'0': [0, 0, 0, 0],
@@ -24,32 +24,39 @@ const directions = [
 	[0, 1], [1, -1], [1, 0], [1, 1]
 ];
 
+var rows = 0;
+var cols = 0;
+
 const game = document.getElementById("game");
 let board = [];
 
 function init() {
-	var key = document.getElementById("key");
-	var message = document.getElementById("message");
+	var key = document.getElementById("key").value;
+	var message = document.getElementById("message").value;
 
-	var key = "1234567890123456";
-	var message = "helloooooo";
 
 	const encryptedBitsArr = encrypt(key, message);
-	console.log(encryptedBitsArr);
 
 	generateBoard(encryptedBitsArr);
 	setNumbers();
 }
 
+const form = document.getElementById("form");
+form.addEventListener("submit", (e) => {
+	e.preventDefault();
+	init();
+	updateBoard();
+});
+
 function generateBoard(encryptedBitsArr) {
 	const length = encryptedBitsArr.length;
-	const rows = Math.ceil(length * 0.8);
-	const cols = Math.ceil(length / rows);
+	cols = Math.ceil(Math.ceil(Math.sqrt(length) / 0.8) / 4.0) * 4;
+	rows = Math.ceil(length / cols) * 3;
 
-	for (const row = 0; row < rows; row++) {
+	for (let row = 0; row < rows; row++) {
 		board[row] = [];
 
-		for (const col = 0; col < cols; col++) {
+		for (let col = 0; col < cols; col++) {
 			board[row][col] = {
 				mine: false,
 				nearMines: 0,
@@ -60,29 +67,36 @@ function generateBoard(encryptedBitsArr) {
 	}
 	
 	var i = 0;
-
-	for (const row of board) {
-		for (const cell of row) {
+	for (let row = 0; row < rows; row++) {
+		for (let col = 0; col < cols; col++) {
 			if (i > length) {
 				i++;
-				continue;
+				return;
 			}
 
-			if (encryptedBitsArr[i] = 1) {
-				cell.mine = true;
-			}
+			if ((row * cols + col) % 3 == 0) {
+				if (encryptedBitsArr[i] == 1) {
+					board[row][col].mine = true;
+				} else {
+					board[row][col].mine = false;
+				}
 
-			i++;
+				i++;
+			} else {
+				let result = Math.floor(Math.random() * 12);
+				if (result == 0) {
+					board[row][col].mine = true;
+				} else {
+					board[row][col].mine = false;
+				}
+			}
 		}
 	}
 }
 
 function setNumbers() {
-	const rows = board.length;
-	const cols = board[0].length;
-
-	for (const row in board) {
-		for (const col in row) {
+	for (let row = 0; row < rows; row++) {
+		for (let col = 0; col < cols; col++) {
 			var count = 0;
 			if (!board[row][col].mine) {
 				for (const [x, y] of directions) {
@@ -103,9 +117,6 @@ function setNumbers() {
 }
 
 function revealCell(row, col) {
-	const rows = board.length;
-	const cols = board[0].length;
-
 	if (row < 0 || row >= rows || col < 0 || col >= cols ||
 		board[row][col].revealed || board[row][col].flagged
 	) {
@@ -135,15 +146,16 @@ function flagCell(row, col) {
 		return;
 	}
 
-	board[row][col].flagged = true;
+	if (board[row][col].flagged == false) {
+		board[row][col].flagged = true;
+	} else {
+		board[row][col].flagged = false;
+	}
 
 	updateBoard();
 }
 
 function updateBoard() {
-	const rows = board.length;
-	const cols = board[0].length;
-
 	game.innerHTML = "";
 
 	for (let row = 0; row < rows; row++) {
@@ -155,8 +167,11 @@ function updateBoard() {
 				if (board[row][col].mine) {
 					cell.classList.add("mine");
 					cell.textContent = "*";
-				} else if (board[i][j].nearMines !== 0) {
-					cell.textContent = board[i][j].nearMines;
+				} else {
+					cell.classList.add("revealed");
+					if (board[row][col].nearMines !== 0) {
+						cell.textContent = board[row][col].nearMines;
+					}
 				}
 			}
 
@@ -173,9 +188,13 @@ function updateBoard() {
 	}
 }
 
+function gameOver() {
+
+}
+
 function hex2Bin(s) {
 	var ret = [];
-	len = s.length;
+	const len = s.length;
 	for (var i = 0; i < len; i++) {
 		ret = ret.concat(hex2BinMap[s[i]]);
 	}
@@ -195,6 +214,3 @@ function encrypt(key, message) {
 
 	return hex2Bin(encryptedHexKey).concat(hex2Bin(encryptedHex));
 }
-
-init();
-updateBoard();
