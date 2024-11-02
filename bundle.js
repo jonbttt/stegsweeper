@@ -852,7 +852,7 @@ form.addEventListener("submit", (e) => {
 	e.preventDefault();
 	init();
 	updateBoard();
-  });
+});
 
 function generateBoard(encryptedBitsArr) {
 	const length = encryptedBitsArr.length;
@@ -877,10 +877,10 @@ function generateBoard(encryptedBitsArr) {
 		for (let col = 0; col < cols; col++) {
 			if (i > length) {
 				i++;
-				continue;
+				return;
 			}
 
-			if (row % 3 == 0) {
+			if ((row * cols + col) % 3 == 0) {
 				if (encryptedBitsArr[i] == 1) {
 					board[row][col].mine = true;
 				} else {
@@ -889,7 +889,7 @@ function generateBoard(encryptedBitsArr) {
 
 				i++;
 			} else {
-				let result = Math.floor(Math.random() * 3);
+				let result = Math.floor(Math.random() * 12);
 				if (result == 0) {
 					board[row][col].mine = true;
 				} else {
