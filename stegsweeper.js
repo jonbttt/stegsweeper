@@ -1,4 +1,4 @@
-import aesjs from './node_modules/aes-js/index.js';
+var aesjs = require('./node_modules/aes-js/index.js');
 
 var hex2BinMap = {
 	'0': [0, 0, 0, 0],
@@ -24,6 +24,9 @@ const directions = [
 	[0, 1], [1, -1], [1, 0], [1, 1]
 ];
 
+var rows = 0;
+var cols = 0;
+
 const game = document.getElementById("game");
 let board = [];
 
@@ -43,13 +46,13 @@ function init() {
 
 function generateBoard(encryptedBitsArr) {
 	const length = encryptedBitsArr.length;
-	const rows = Math.ceil(length * 0.8);
-	const cols = Math.ceil(length / rows);
+	rows = Math.ceil(length * 0.8);
+	cols = Math.ceil(length / rows);
 
-	for (const row = 0; row < rows; row++) {
+	for (const row in rows) {
 		board[row] = [];
 
-		for (const col = 0; col < cols; col++) {
+		for (const col in cols) {
 			board[row][col] = {
 				mine: false,
 				nearMines: 0,
@@ -78,9 +81,6 @@ function generateBoard(encryptedBitsArr) {
 }
 
 function setNumbers() {
-	const rows = board.length;
-	const cols = board[0].length;
-
 	for (const row in board) {
 		for (const col in row) {
 			var count = 0;
@@ -141,9 +141,6 @@ function flagCell(row, col) {
 }
 
 function updateBoard() {
-	const rows = board.length;
-	const cols = board[0].length;
-
 	game.innerHTML = "";
 
 	for (let row = 0; row < rows; row++) {
@@ -175,7 +172,7 @@ function updateBoard() {
 
 function hex2Bin(s) {
 	var ret = [];
-	len = s.length;
+	const len = s.length;
 	for (var i = 0; i < len; i++) {
 		ret = ret.concat(hex2BinMap[s[i]]);
 	}
