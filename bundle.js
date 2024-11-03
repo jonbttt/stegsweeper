@@ -1024,7 +1024,15 @@ function updateBoard() {
 }
 
 function gameOver() {
+	if (confirm('Game Over! (Due to this being a demo, pressing \'cancel\' will not refresh the page.)')) {
+		window.location.reload();
+	}
 
+	/*
+	if (!alert('Game Over!')) {
+		window.location.reload();
+	}
+	*/
 }
 
 function hex2Bin(s) {
