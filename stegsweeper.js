@@ -19,6 +19,25 @@ var hex2BinMap = {
 	'f': [1, 1, 1, 1]
 }
 
+var bin2HexMap = {
+	'0000': '0',
+	'0001': '1',
+	'0010': '2',
+	'0011': '3',
+	'0100': '4',
+	'0101': '5',
+	'0110': '6',
+	'0111': '7',
+	'1000': '8',
+	'1001': '9',
+	'1010': 'a',
+	'1011': 'b',
+	'1100': 'c',
+	'1101': 'd',
+	'1110': 'e',
+	'1111': 'f',
+}
+
 const directions = [
 	[-1, -1], [-1, 0], [-1, 1], [0, -1], 
 	[0, 1], [1, -1], [1, 0], [1, 1]
@@ -34,8 +53,8 @@ function init() {
 	var key = document.getElementById("key").value;
 	var message = document.getElementById("message").value;
 
-
 	const encryptedBitsArr = encrypt(key, message);
+	console.log(encryptedBitsArr.join(""));
 
 	generateBoard(encryptedBitsArr);
 	setNumbers();
@@ -46,6 +65,33 @@ form.addEventListener("submit", (e) => {
 	e.preventDefault();
 	init();
 	updateBoard();
+
+	var br = document.createElement("br");
+
+	var decryptForm = document.createElement("form");
+	decryptForm.setAttribute("id", "decryptForm");
+
+	var encryptedBits = document.createElement("textarea");
+	encryptedBits.setAttribute("rows", 16);
+	encryptedBits.setAttribute("cols", 48);
+	encryptedBits.setAttribute("id", "encryptedBits");
+
+	var submit = document.createElement("input");
+	submit.setAttribute("type", "submit");
+	submit.setAttribute("value", "Submit");
+
+	decryptForm.appendChild(encryptedBits);
+	decryptForm.appendChild(br.cloneNode());
+	decryptForm.appendChild(br.cloneNode());
+	decryptForm.appendChild(submit);
+
+	document.getElementsByTagName("body")[0].appendChild(decryptForm);
+
+	const decryptFormElem = document.getElementById("decryptForm");
+	decryptFormElem.addEventListener("submit", (e) => {
+		e.preventDefault();
+		decrypt(document.getElementById("encryptedBits").value);
+	});
 });
 
 function generateBoard(encryptedBitsArr) {
@@ -218,7 +264,15 @@ function updateBoard() {
 }
 
 function gameOver() {
+	if (confirm('Game Over! (Due to this being a demo, pressing \'cancel\' or \'esc\' will not refresh the page.)')) {
+		window.location.reload();
+	}
 
+	/*
+	if (!alert('Game Over!')) {
+		window.location.reload();
+	}
+	*/
 }
 
 function hex2Bin(s) {
@@ -242,4 +296,33 @@ function encrypt(key, message) {
 	var encryptedHexKey = aesjs.utils.hex.fromBytes(keyBytes);
 
 	return hex2Bin(encryptedHexKey).concat(hex2Bin(encryptedHex));
+}
+
+function bin2Hex(s) {
+	var ret = "";
+	const len = s.length;
+	for (var i = 0; i < len; i += 4) {
+		var nibble = s.slice(i, i + 4);
+		ret = ret.concat(bin2HexMap[nibble]);
+	}
+
+	return ret;
+}
+
+function decrypt(encryptedBits) {
+	var keyBits = encryptedBits.slice(0, 128);
+	var messageBits = encryptedBits.slice(128);
+
+	var keyHex = bin2Hex(keyBits);
+	var messageHex = bin2Hex(messageBits);
+
+	var keyBytes = aesjs.utils.hex.toBytes(keyHex);
+	var encryptedBytes = aesjs.utils.hex.toBytes(messageHex);
+
+	var aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter());
+	var messageASCII = aesCtr.decrypt(encryptedBytes);
+
+	var message = String.fromCharCode.apply(null, messageASCII);
+
+    alert('Message is: ' + message);
 }
