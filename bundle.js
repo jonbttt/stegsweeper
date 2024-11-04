@@ -860,6 +860,7 @@ function init() {
 	var message = document.getElementById("message").value;
 
 	const encryptedBitsArr = encrypt(key, message);
+	console.log(encryptedBitsArr.join(""));
 
 	generateBoard(encryptedBitsArr);
 	setNumbers();
@@ -877,8 +878,8 @@ form.addEventListener("submit", (e) => {
 	decryptForm.setAttribute("id", "decryptForm");
 
 	var encryptedBits = document.createElement("textarea");
-	encryptedBits.setAttribute("rows", 4);
-	encryptedBits.setAttribute("cols", 50);
+	encryptedBits.setAttribute("rows", 16);
+	encryptedBits.setAttribute("cols", 48);
 	encryptedBits.setAttribute("id", "encryptedBits");
 
 	var submit = document.createElement("input");
@@ -1125,7 +1126,9 @@ function decrypt(encryptedBits) {
 	var encryptedBytes = aesjs.utils.hex.toBytes(messageHex);
 
 	var aesCtr = new aesjs.ModeOfOperation.ctr(keyBytes, new aesjs.Counter());
-	var message = aesCtr.decrypt(encryptedBytes);
+	var messageASCII = aesCtr.decrypt(encryptedBytes);
+
+	var message = String.fromCharCode.apply(null, messageASCII);
 
     alert('Message is: ' + message);
 }
